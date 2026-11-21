@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: the-crepery-erp-trial
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --workers 2 --threads 4 --timeout 120
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: the-crepery-trial-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: OWNER_SETUP_KEY
+        sync: false
+      - key: COOKIE_SECURE
+        value: "1"
+databases:
+  - name: the-crepery-trial-db
+    plan: free
